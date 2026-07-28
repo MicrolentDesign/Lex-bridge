@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import logo from '../assets/logo.png';
 import { primaryNav, serviceGroups, serviceMenuFooterLinks, utilityLink, primaryCta } from '../lib/nav';
 import { suspendLenis, resumeLenis } from '../lib/lenis';
+import { Link } from '../lib/router';
 
 /**
  * v2.0 §3.1 — sticky, never disappears, condenses on scroll.
@@ -79,9 +80,9 @@ export function Header() {
           <div className="flex items-center justify-end gap-6 h-9">
             <span className="text-legal text-white/60">Hong Kong</span>
             <span className="h-3 w-px bg-white/20" aria-hidden="true" />
-            <a href={utilityLink.href} className="block py-2.5 text-legal text-white/80 hover:text-white transition-colors">
+            <Link href={utilityLink.href} className="block py-2.5 text-legal text-white/80 hover:text-white transition-colors">
               {utilityLink.label}
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -93,7 +94,7 @@ export function Header() {
             scrolled ? 'py-3' : 'py-4'
           }`}
         >
-          <a href="/" className="flex items-center gap-4 py-2 -my-2 shrink-0">
+          <Link href="/" className="flex items-center gap-4 py-2 -my-2 shrink-0">
             <img
               src={logo}
               alt="Lex Bridge Advisory Group"
@@ -104,7 +105,7 @@ export function Header() {
             <span className="hidden xl:inline-block border-l border-hairline pl-4 text-legal text-ink-60 leading-snug max-w-60">
               International Legal Management &amp; Coordination
             </span>
-          </a>
+          </Link>
 
           <div className="flex items-center gap-8">
             <nav className="hidden lg:flex items-center gap-7">
@@ -116,7 +117,7 @@ export function Header() {
                     onMouseEnter={openServices}
                     onMouseLeave={scheduleCloseServices}
                   >
-                    <a
+                    <Link
                       href={item.href}
                       className="flex items-center gap-1.5 py-2.5 text-body-sm font-medium text-navy-900 hover:text-gold-500 transition-colors whitespace-nowrap"
                       aria-expanded={servicesOpen}
@@ -132,27 +133,27 @@ export function Header() {
                       >
                         <path d="M1 1L5 5L9 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                       </svg>
-                    </a>
+                    </Link>
 
                   </div>
                 ) : (
-                  <a
+                  <Link
                     key={item.href}
                     href={item.href}
                     className="block py-2.5 text-body-sm font-medium text-navy-900 hover:text-gold-500 transition-colors whitespace-nowrap"
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 ),
               )}
             </nav>
 
-            <a
+            <Link
               href={primaryCta.href}
               className="hidden lg:inline-flex items-center rounded-btn bg-navy-900 px-5 py-2.5 text-body-sm font-medium text-white hover:bg-navy-700 transition-colors whitespace-nowrap"
             >
               {primaryCta.label}
-            </a>
+            </Link>
 
             <button
               type="button"
@@ -194,13 +195,14 @@ export function Header() {
                     <ul className="flex flex-col -my-1">
                       {group.items.map((s) => (
                         <li key={s.href}>
-                          <a
+                          <Link
                             href={s.href}
+                            onClick={() => setServicesOpen(false)}
                             className="group/link flex items-start gap-2.5 py-2 text-body-sm text-ink hover:text-navy-900 leading-snug transition-colors"
                           >
                             <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-navy-900/25 group-hover/link:bg-gold-500 transition-colors" />
                             {s.label}
-                          </a>
+                          </Link>
                         </li>
                       ))}
                     </ul>
@@ -214,13 +216,14 @@ export function Header() {
                   </p>
                   <div className="mt-auto flex flex-col gap-3">
                     {serviceMenuFooterLinks.map((l) => (
-                      <a
+                      <Link
                         key={l.href}
                         href={l.href}
+                        onClick={() => setServicesOpen(false)}
                         className="text-body-sm font-medium text-navy-900 hover:text-gold-500 transition-colors"
                       >
                         {l.label} &rarr;
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>

@@ -1,20 +1,9 @@
 import logo from '../assets/logo.png';
+import { Link } from '../lib/router';
 
 /**
  * C7 — structure per v2.0 §3.5, ordered logo + corporate summary first, then the four
  * link columns, then the status statement and legal bar.
- *
- * Mobile keeps the four columns as a 2×2 grid rather than a single stack — four stacked
- * columns pushed the legal bar a long way down for no gain.
- *
- * The status statement sits above the legal bar at readable size, NOT 10px grey —
- * v2.0 §1.3 Fix 3 promotes it out of the footer fine print, and this is one of its three
- * required placements sitewide (PLAN.md §5.4). Wording is verbatim and must stay
- * identical across all three.
- *
- * Contact details and the BR number are blocked on the client (PLAN.md §10) and are
- * marked as visible placeholders rather than invented values — a plausible-looking fake
- * address on a professional-status-sensitive site is worse than an obvious gap.
  */
 const columns = [
   {
@@ -60,13 +49,15 @@ export function Footer() {
         {/* Logo + corporate summary. Copy verbatim from CD §3 "CORPORATE SUMMARY". */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-16 py-14 md:py-16">
           <div className="lg:col-span-4">
-            <img
-              src={logo}
-              alt="Lex Bridge Advisory Group"
-              width={1275}
-              height={239}
-              className="h-10 w-auto brightness-0 invert opacity-95"
-            />
+            <Link href="/">
+              <img
+                src={logo}
+                alt="Lex Bridge Advisory Group"
+                width={1275}
+                height={239}
+                className="h-10 w-auto brightness-0 invert opacity-95"
+              />
+            </Link>
           </div>
           <div className="lg:col-span-7 lg:col-start-6">
             <p className="text-body text-white/75 max-w-2xl">
@@ -82,16 +73,15 @@ export function Footer() {
           {columns.map((col) => (
             <div key={col.title}>
               <p className="text-eyebrow uppercase text-gold-500 mb-4">{col.title}</p>
-              {/* Vertical padding clears the 44px tap-target floor (DESIGN-DIRECTION.md §6). */}
               <ul className="flex flex-col -my-2">
                 {col.links.map((link) => (
                   <li key={link.href}>
-                    <a
+                    <Link
                       href={link.href}
                       className="block py-3 text-body-sm text-white/75 hover:text-white transition-colors"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -106,9 +96,9 @@ export function Footer() {
               <li className="text-white/40">[Email — to confirm]</li>
               <li className="text-white/40">[Phone — to confirm]</li>
               <li className="-mb-3 mt-0.5">
-                <a href="/contact" className="block py-3 text-white/75 hover:text-white transition-colors">
+                <Link href="/contact" className="block py-3 text-white/75 hover:text-white transition-colors">
                   Contact Lex Bridge →
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -130,12 +120,12 @@ export function Footer() {
           <ul className="flex flex-wrap items-center gap-x-5 -my-2">
             {legalLinks.map((link) => (
               <li key={link.label}>
-                <a
+                <Link
                   href={link.href}
                   className="block py-3.5 text-legal text-white/60 hover:text-white transition-colors"
                 >
                   {link.label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
