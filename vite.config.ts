@@ -14,6 +14,6 @@ import tailwindcss from '@tailwindcss/vite'
  * gets '/'. Local dev also stays at '/'.
  */
 export default defineConfig({
-  base: process.env.VITE_BASE ?? '/',
+  base: process.env.VITE_BASE ?? './',
   plugins: [react(), tailwindcss()],
 })
