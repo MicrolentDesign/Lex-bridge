@@ -1,0 +1,150 @@
+/**
+ * Design tokens — Lex Bridge
+ * Source of truth: DESIGN-DIRECTION.md §2 (colour), §3 (type), §4 (space/shape).
+ * Fluid type is clamped between 375px and 1440px viewports.
+ */
+
+@theme {
+  /* ---- Colour — DESIGN-DIRECTION.md §2 ---- */
+  --color-navy-900: #001e4c;
+  --color-navy-800: #002750;
+  --color-navy-700: #0b2545;
+  --color-gold-500: #b08a41;
+  --color-gold-100: #f3ebdc;
+  --color-ink: #1c2733;
+  --color-ink-60: #5a6675;
+  --color-paper: #ffffff;
+  --color-base: #faf9f6;
+  --color-tint: #e8eef5;
+  --color-hairline: rgba(0, 30, 76, 0.12);
+
+  /* ---- Type families — DESIGN-DIRECTION.md §8 ---- */
+  --font-display: 'Erode', 'Erode Fallback', 'Iowan Old Style', Georgia, serif;
+  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* ---- Type scale — DESIGN-DIRECTION.md §3 ---- */
+  /* Fluid tokens: clamp(mobile, fluid, desktop), computed between 375px and 1440px. */
+  /* 34px @375 → 68px @1440. The 42px floor was too large for the long brand-line
+     headline on a 375px screen: it ran to five lines and pushed the CTAs off-screen. */
+  --text-display-xl: clamp(2.125rem, 1.377rem + 3.192vw, 4.25rem);
+  --text-display-xl--line-height: 1.05;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-xl--font-weight: 300;
+
+  --text-display-l: clamp(1.875rem, 1.567rem + 1.315vw, 2.75rem);
+  --text-display-l--line-height: 1.1;
+  --text-display-l--letter-spacing: -0.015em;
+  --text-display-l--font-weight: 300;
+
+  --text-display-m: clamp(1.5rem, 1.412rem + 0.376vw, 1.75rem);
+  --text-display-m--line-height: 1.15;
+  --text-display-m--letter-spacing: -0.01em;
+  --text-display-m--font-weight: 400;
+
+  --text-lead: clamp(1.125rem, 1.059rem + 0.282vw, 1.3125rem);
+  --text-lead--line-height: 1.5;
+  --text-lead--letter-spacing: 0em;
+  --text-lead--font-weight: 400;
+
+  --text-body: clamp(1rem, 0.978rem + 0.094vw, 1.0625rem);
+  --text-body--line-height: 1.6;
+  --text-body--letter-spacing: 0em;
+  --text-body--font-weight: 400;
+
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.55;
+  --text-body-sm--letter-spacing: 0em;
+  --text-body-sm--font-weight: 400;
+
+  --text-eyebrow: 0.78125rem;
+  --text-eyebrow--line-height: 1.2;
+  --text-eyebrow--letter-spacing: 0.1em;
+  --text-eyebrow--font-weight: 600;
+
+  --text-legal: 0.8125rem;
+  --text-legal--line-height: 1.6;
+  --text-legal--letter-spacing: 0em;
+  --text-legal--font-weight: 400;
+
+  /* ---- Shape — DESIGN-DIRECTION.md §4 ---- */
+  --radius-btn: 2px;
+  --radius-card: 8px;
+
+  /* ---- Containers — DESIGN-DIRECTION.md §4 ---- */
+  --container-content: 75rem;   /* 1200px */
+  --container-shell: 82.5rem;   /* 1320px */
+  --container-measure: 45rem;   /* 720px — legal pages, T9 */
+
+  /* ---- Motion — DESIGN-DIRECTION.md §5 ---- */
+  --ease-brand: cubic-bezier(0.44, 0, 0.56, 1);
+}
+
+/*
+ * Metric-matched fallback so a font swap doesn't shift the hero — DESIGN-DIRECTION.md §8.
+ * A distinct family name: it stands in for Erode only until the webfont loads,
+ * rather than competing with it under the same name.
+ */
+@font-face {
+  font-family: 'Erode Fallback';
+  size-adjust: 108%;
+  ascent-override: 90%;
+  src: local('Georgia');
+}
+
+:root {
+  color-scheme: light;
+}
+
+/*
+ * Element defaults go in @layer base so Tailwind utilities can override them.
+ * Unlayered CSS wins over ANY layered CSS in the cascade, so an unlayered
+ * `h3 { color: navy }` beat `text-white` from @layer utilities — which rendered
+ * navy-on-navy headings invisible on dark cards. Keep these inside the layer.
+ */
+@layer base {
+  html {
+    background: var(--color-base);
+    /* Reserve the scrollbar track always, so locking body scroll for the mobile drawer
+       can't change the viewport width and nudge the header layout. */
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    margin: 0;
+    color: var(--color-ink);
+    background: var(--color-base);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    margin: 0;
+    font-family: var(--font-display);
+    color: var(--color-navy-900);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  ::selection {
+    background: var(--color-gold-100);
+    color: var(--color-navy-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-navy-900);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
