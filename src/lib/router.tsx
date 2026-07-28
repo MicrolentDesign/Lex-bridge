@@ -14,6 +14,16 @@ const RouterContext = createContext<RouterContextType>({
  * Normalizes pathname by stripping Vite base path (e.g. /Lex-bridge/) if present.
  */
 function getNormalizedPath(): string {
+  // Check for SPA redirect parameter from 404.html
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectedPath = urlParams.get('p');
+  if (redirectedPath) {
+    const cleanPath = redirectedPath.startsWith('/') ? redirectedPath : '/' + redirectedPath;
+    const fullPath = window.location.pathname.replace(/\/$/, '') + cleanPath;
+    window.history.replaceState({}, '', fullPath);
+    return cleanPath;
+  }
+
   const path = window.location.pathname;
   // Handle /Lex-bridge or /Lex-bridge/ prefix for GitHub Pages
   const basePathMatch = path.match(/^\/Lex-bridge(\/.*)?$/i);

@@ -295,9 +295,13 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
           item.hasMegaMenu ? (
             <div key={item.href} className="border-b border-hairline">
               <div className="flex items-stretch">
-                <a href={item.href} className="flex-1 py-4 text-display-m text-navy-900">
+                <Link
+                  href={item.href}
+                  onClick={onClose}
+                  className="flex-1 py-4 text-display-m text-navy-900"
+                >
                   {item.label}
-                </a>
+                </Link>
                 <button
                   type="button"
                   onClick={() => setServicesExpanded((v) => !v)}
@@ -327,9 +331,13 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
                         <ul className="flex flex-col -my-1">
                           {group.items.map((s) => (
                             <li key={s.href}>
-                              <a href={s.href} className="block py-2.5 text-body-sm text-ink leading-snug">
+                              <Link
+                                href={s.href}
+                                onClick={onClose}
+                                className="block py-2.5 text-body-sm text-ink leading-snug"
+                              >
                                 {s.label}
-                              </a>
+                              </Link>
                             </li>
                           ))}
                         </ul>
@@ -337,13 +345,14 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
                     ))}
                     <div className="flex flex-col border-t border-hairline pt-2">
                       {serviceMenuFooterLinks.map((l) => (
-                        <a
+                        <Link
                           key={l.href}
                           href={l.href}
+                          onClick={onClose}
                           className="block py-2.5 text-body-sm font-medium text-navy-900"
                         >
                           {l.label} &rarr;
-                        </a>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -351,29 +360,35 @@ function MobileDrawer({ onClose }: { onClose: () => void }) {
               )}
             </div>
           ) : (
-            <a
+            <Link
               key={item.href}
               href={item.href}
+              onClick={onClose}
               className="block py-4 border-b border-hairline text-display-m text-navy-900"
             >
               {item.label}
-            </a>
+            </Link>
           ),
         )}
 
-        <a href={utilityLink.href} className="block py-4 text-body font-medium text-ink-60">
+        <Link
+          href={utilityLink.href}
+          onClick={onClose}
+          className="block py-4 text-body font-medium text-ink-60"
+        >
           {utilityLink.label}
-        </a>
+        </Link>
       </nav>
 
       {/* Pinned so the primary action is reachable without scrolling the whole list. */}
       <div className="shrink-0 border-t border-hairline bg-paper px-6 py-4">
-        <a
+        <Link
           href={primaryCta.href}
+          onClick={onClose}
           className="flex items-center justify-center rounded-btn bg-navy-900 px-5 py-4 text-body font-medium text-white"
         >
           {primaryCta.label}
-        </a>
+        </Link>
       </div>
     </div>
   );
