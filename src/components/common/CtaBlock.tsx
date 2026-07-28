@@ -1,6 +1,5 @@
 import { Link } from '../../lib/router';
 import { SectionHeader } from '../SectionHeader';
-import { ConcaveCorner } from '../ConcaveCorner';
 import { Reveal } from '../Reveal';
 
 interface CtaBlockProps {
@@ -42,8 +41,6 @@ export function CtaBlock({ variant = 'A' }: CtaBlockProps) {
       <div className="mx-auto max-w-(--container-shell) px-6 md:px-10">
         <Reveal>
           <div className="relative overflow-hidden rounded-card bg-navy-900 text-white p-8 md:p-14 lg:p-20 shadow-2xl">
-            <ConcaveCorner corner="top-left" size={48} fill="var(--color-paper)" className="border-r border-b border-hairline/20" />
-            
             <div className="relative z-10 max-w-2xl">
               <SectionHeader eyebrow={content.eyebrow} title={content.headline} tone="dark" />
               <p className="text-body-m text-white/80 mt-6 mb-10 leading-relaxed">
