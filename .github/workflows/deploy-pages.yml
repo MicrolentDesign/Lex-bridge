@@ -1,0 +1,61 @@
+name: Deploy to GitHub Pages
+
+# GitHub Pages was serving the repository source, so index.html's
+# <script src="/src/main.tsx"> reached the browser as TypeScript and #root stayed empty.
+# Pages must serve the Vite build output instead, which is what this workflow uploads.
+#
+# REQUIRED ONE-TIME SETTING: Settings → Pages → Build and deployment → Source must be
+# "GitHub Actions", not "Deploy from a branch". Otherwise the deploy step fails.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never let two deploys race; queue them and drop superseded runs.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npx oxlint src
+
+      # `npm run build` runs `tsc -b` first, so this type-checks as well as bundles.
+      - name: Build
+        run: npm run build
+        env:
+          VITE_BASE: /Lex-bridge/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
