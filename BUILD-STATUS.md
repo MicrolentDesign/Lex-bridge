@@ -126,6 +126,53 @@ Escape-to-close was added at the same time, since the drawer is a full-screen ov
 
 ---
 
+## 4.1 Deployment — GitHub Pages
+
+Repo: `github.com/MicrolentDesign/Lex-bridge` · preview URL
+`microlentdesign.github.io/Lex-bridge/`
+
+**Two defects found when the preview came back blank, both verified against the live URL:**
+
+1. **Pages was serving repository source, not a build.** The browser received
+   `index.html` pointing at `/src/main.tsx` — TypeScript it cannot execute, at a path that
+   does not exist on Pages — so `#root` stayed empty.
+2. **Asset URLs were absolute** (`/assets/…`), which resolve to the domain root and 404
+   when the site is served from the `/Lex-bridge/` subpath.
+
+**Fixes:**
+
+- Vite `base` now comes from `VITE_BASE` (committed, on `main`). Not hardcoded: the
+  client's own domain serves from `/` and simply omits the variable; local dev stays at `/`.
+- The build output is published to the **`gh-pages`** branch, which is what Pages should
+  serve. Verified: serving that exact artifact under `/Lex-bridge/` renders 11 sections
+  with all assets returning 200.
+
+**Required setting:** Settings → Pages → Branch → **`gh-pages`** / `(root)`.
+While it points at `main`, Pages serves unbuilt source and the page stays blank.
+
+**Redeploy (until CI lands):**
+
+```bash
+VITE_BASE=/Lex-bridge/ npm run build
+cd /tmp && rm -rf lexghp && mkdir lexghp && cp -R "$OLDPWD/dist/." lexghp/ && touch lexghp/.nojekyll
+cd lexghp && git init -q && git add -A && git commit -qm Deploy \
+  && git push -q --force https://github.com/MicrolentDesign/Lex-bridge.git HEAD:gh-pages
+```
+
+**Blocked:** `.github/workflows/deploy-pages.yml` is written but **not pushed** — the
+stored credential lacks the `workflow` scope, so GitHub rejects it
+(`refusing to allow a Personal Access Token to create or update workflow`). Once the
+workflow lands, every push to `main` builds and deploys automatically and the manual step
+above is unnecessary. Two ways to land it: add `workflow` scope to the token, or paste the
+file via the GitHub web UI (Actions → new workflow), then switch Pages Source to
+"GitHub Actions".
+
+**Known preview limitation:** nav links point at real paths (`/about`, `/services/…`) that
+do not exist yet, so they return GitHub's 404. Deliberately not masked with an
+`index.html` 404 fallback — that would serve homepage content under `/about`, which is
+worse than an honest 404 on a site whose whole point is not misleading readers. Resolves
+with the router and static generation in §5/§6.
+
 ## 5. Decision needed before the next page
 
 Adopt **`vite-react-ssg`** (prerenders every route to static HTML, keeps all existing components) or migrate to Next.js/Astro.
